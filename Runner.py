@@ -21,7 +21,7 @@ class Runner:
         #####
         Phase2 = Phases.Phase2(K3, V3)
         t3 = Phase2.map()
-        Phase2.sort(t3)
+        d3 = Phase2.sort(t3)
         Phase2.reduce(d3)
 
 

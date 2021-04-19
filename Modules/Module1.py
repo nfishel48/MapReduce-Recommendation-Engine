@@ -1,5 +1,6 @@
 import pandas as pd
 from itertools import combinations
+from itertools import permutations 
 
 class Phase1:
 
@@ -31,11 +32,9 @@ class Phase2:
         return t3
 
     def sort(self, t3): #on a cluster this would send the data to diffent nodes before the reduce
-        maxUserId = self.K3.Userid.max()
         d3 = dict()
         i = 0
         while i < len(t3): #Go through the list and create a dictionary with all the values tied to the same user
-            print(t3[i].Userid)
             key = t3[i].Userid
             if key in d3: #if this user id is already in the dict add the values to this key
                 d3[t3[i].Userid].append([t3[i].Movie,t3[i].Rating,t3[i].NumOfRatings])
@@ -45,8 +44,9 @@ class Phase2:
         return d3
 
     def reduce(self, d3):
-        t4 = list(combinations(t3, 2))
-        
+        i = 0
+        while i < len(d3):
+            #loop through twice combine all the lists with append then remove duplicates later
 
         
         
