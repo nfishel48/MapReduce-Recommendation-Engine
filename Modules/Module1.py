@@ -46,7 +46,7 @@ class Phase2:
 
     def reduce(self, d3):
         i = 0
-        while i < len(d3):
+        while i < len(d3): #Generate all unique combos of movies
             j = 0
             while j < len(d3[i])-1:
                 d3[i][j][len(d3[i][j]):]=d3[i][j+1]
@@ -55,7 +55,21 @@ class Phase2:
                     del d3[i][j+1][6:8]
                 j = j + 1
             i = i + 1
-        print(d3[1])
+        
+        #Calcuate stats for phase3
+        i = 0
+        while i < len(d3):
+            j = 0
+            while j < len(d3[i]):
+                ratingProduct = d3[i][j][1] * d3[i][j][4]
+                d3[i][j].append(ratingProduct)
+                rating1Squared = d3[i][j][1] * d3[i][j][1]
+                d3[i][j].append(rating1Squared)
+                rating2Squared = d3[i][j][4] * d3[i][j][4]
+                d3[i][j].append(rating2Squared)
+                j = j +1
+            i = i +1
+        print(d3[0])
 
 
         
