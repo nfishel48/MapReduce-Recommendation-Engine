@@ -69,7 +69,19 @@ class Phase2:
                 d3[i][j].append(rating2Squared)
                 j = j +1
             i = i +1
-        print(d3[0])
+        return d3
+
+    class Phase3:
+
+        def __init__(self, K4, V4, d3):
+            self.K4 = K4
+            self.K3 = V4
+
+        def map(self, d3):
+            self.K4 = pd.DataFrame([d3]) #move all the movies to Key4 and all values to Values4 keep same index
+
+        
+        def reduce(self):
 
 
         
