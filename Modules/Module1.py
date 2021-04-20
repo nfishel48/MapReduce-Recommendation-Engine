@@ -39,14 +39,25 @@ class Phase2:
             if key in d3: #if this user id is already in the dict add the values to this key
                 d3[t3[i].Userid].append([t3[i].Movie,t3[i].Rating,t3[i].NumOfRatings])
             else: #Create a new key and give values to that key
-                d3[t3[i].Userid] = [t3[i].Movie,t3[i].Rating,t3[i].NumOfRatings]
+                d3[t3[i].Userid] = []
+                d3[t3[i].Userid].append([t3[i].Movie,t3[i].Rating,t3[i].NumOfRatings])
             i = i + 1
         return d3
 
     def reduce(self, d3):
         i = 0
         while i < len(d3):
-            #loop through twice combine all the lists with append then remove duplicates later
+            j = 0
+            while j < len(d3[i])-1:
+                d3[i][j][len(d3[i][j]):]=d3[i][j+1]
+                if j+1 == len(d3[i])-1:
+                    d3[i][j+1][len(d3[i][j+1]):]=d3[i][0]
+                    del d3[i][j+1][6:8]
+                j = j + 1
+            i = i + 1
+        print(d3[1])
 
+
+        
         
         
