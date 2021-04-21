@@ -71,19 +71,22 @@ class Phase2:
             i = i +1
         return d3
 
-    class Phase3:
+class Phase3:
 
-        def __init__(self, K4, V4, d3):
-            self.K4 = K4
-            self.K3 = V4
-
-        def map(self, d3):
-            self.K4 = pd.DataFrame([d3]) #move all the movies to Key4 and all values to Values4 keep same index
+    def map(self, d3):
+        i = 0
+        K4 = pd.DataFrame([], columns=['Movie1', 'Movie2'])
+        V4 = pd.DataFrame([], columns=['rating1', 'numOfRating1', 'rating2', 'numOfRating2', 'ratingProduct', 'rating1Squared', 'rating2Squared'])
+        while i < len(d3):
+            j = 0
+            while j < len(d3[i]):
+                newrow = {'Movie1': d3[i][j][0], 'Movie2': d3[i][j][3]}
+                K4 = K4.append(newrow, ignore_index=True)
+                newrow2 = {'rating1':d3[i][j][1], 'numOfRating1':d3[i][j][2], 'rating2':d3[i][j][4], 'numOfRating2':d3[i][j][5], 'ratingProduct':d3[i][j][6], 'rating1Squared':d3[i][j][7], 'rating2Squared':d3[i][j][8]}
+                V4 = V4.append(newrow2, ignore_index=True)
+                j = j + 1
+            i = i + 1
+        return(K4, V4)
 
         
-        def reduce(self):
-
-
-        
-        
-        
+    #def reduce(self):    

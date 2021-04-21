@@ -23,6 +23,8 @@ class Runner:
         t3 = Phase2.map()
         d3 = Phase2.sort(t3)
         d3 = Phase2.reduce(d3)
+        Phase3 = Phases.Phase3()
+        Phase3.map(d3)
 
 
 Run = Runner()
