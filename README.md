@@ -22,3 +22,6 @@ wrapt==1.12.1
 
 # About
 This Recommendation engine will take a list of UserIds, MovieIds and Ratings. It will output a list of Movie pairs and a Cosine similarity score.
+
+# Data
+I used the MovieLens 25M Dataset in creating and testing this program, it can be found here https://grouplens.org/datasets/movielens/25m/
