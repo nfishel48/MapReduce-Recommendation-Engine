@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from scipy.stats import stats
 from itertools import combinations
 from itertools import permutations 
 
@@ -11,13 +13,15 @@ class Phase1:
         self.V3 = V3
 
     def map(self):
-        data = pd.read_csv (r'./Data/testInput1.csv') #TODO read path from user
+        data = pd.read_csv (r'./Data/testInput2.csv') #TODO read path from user
+        print("Start Phase1")
         self.K2 = pd.DataFrame(data, columns= ['Movie'])
         self.V2 = pd.DataFrame(data, columns= ['Userid','Rating'])
 
     def reduce(self):
         self.K3 = pd.DataFrame({'Userid': self.V2.Userid})
         self.V3 = pd.concat([self.K2.Movie, self.V2.Rating, self.K2.groupby(by='Movie')['Movie'].transform('count')],axis=1,keys=['Movie', 'Rating', 'NumOfRatings'])
+        print("Phase1 finished")
         return(self.K3, self.V3)
 
 class Phase2:
@@ -28,6 +32,7 @@ class Phase2:
 
     def map(self):
         horizontal_concat = pd.concat([self.K3, self.V3], axis=1)
+        print("Starting Phase2")
         t3 = list(horizontal_concat.itertuples(index=False))
         return t3
 
@@ -60,6 +65,7 @@ class Phase2:
         i = 0
         while i < len(d3):
             j = 0
+            print(f"Reducing...{i}/{len(d3)}")
             while j < len(d3[i]):
                 ratingProduct = d3[i][j][1] * d3[i][j][4]
                 d3[i][j].append(ratingProduct)
@@ -69,6 +75,7 @@ class Phase2:
                 d3[i][j].append(rating2Squared)
                 j = j +1
             i = i +1
+        print("Phase2 finished")
         return d3
 
 class Phase3:
@@ -77,7 +84,9 @@ class Phase3:
         i = 0
         K4 = pd.DataFrame([], columns=['Movie1', 'Movie2'])
         V4 = pd.DataFrame([], columns=['rating1', 'numOfRating1', 'rating2', 'numOfRating2', 'ratingProduct', 'rating1Squared', 'rating2Squared'])
+        print("Starting Phase3")
         while i < len(d3):
+            print(f"Mapping...{i}/{len(d3)}")
             j = 0
             while j < len(d3[i]):
                 newrow = {'Movie1': d3[i][j][0], 'Movie2': d3[i][j][3]}
@@ -86,7 +95,19 @@ class Phase3:
                 V4 = V4.append(newrow2, ignore_index=True)
                 j = j + 1
             i = i + 1
-        return(K4, V4)
+        final = pd.concat([K4, V4], axis=1)
+        return(final)
 
         
-    #def reduce(self):    
+    def reduce(self, final):
+        results = pd.DataFrame([], columns=['Movie1', 'Movie2', 'Similarity']) 
+        i = 0
+        while i < len(final):
+            print(f"Reducing...{i}/{len(final)}")
+            similarity = final.loc[i,"ratingProduct"] / final.loc[i, "numOfRating1"] * final.loc[i, "numOfRating2"] 
+            newrow = {'Movie1':final.loc[i, "Movie1"], 'Movie2':final.loc[i, "Movie2"], 'Similarity':similarity}
+            results = results.append(newrow, ignore_index=True)
+            i = i + 1
+        
+        results.to_csv(r'./out.csv', header=None, index=None, sep=' ', mode='w')
+        print(results)
